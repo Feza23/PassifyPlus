@@ -5,13 +5,19 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 class EncryptDecrypt {
-    public static void main(String[] args) {
+    private HashMap<String, String> authorizedUsers;
+
+    public EncryptDecrypt() {
         // Define the authorized users and passwords
-        HashMap<String, String> authorizedUsers = new HashMap<>();
+        authorizedUsers = new HashMap<>();
         authorizedUsers.put("Alice", "password123");
         authorizedUsers.put("Bob", "password456");
         authorizedUsers.put("Charlie", "password789");
-        // Create the login screen
+
+        createLoginScreen();
+    }
+
+    private void createLoginScreen() {
         JFrame loginFrame = new JFrame("Login");
         loginFrame.setSize(400, 300);
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,18 +41,7 @@ class EncryptDecrypt {
                 if (authorizedUsers.containsKey(username) && authorizedUsers.get(username).equals(password)) {
                     // User has been authenticated, show the main program window
                     loginFrame.dispose();
-                    JFrame mainFrame = new JFrame("Encryption/Decryption Program");
-                    mainFrame.setSize(400, 300);
-                    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-                    InputPanel inputPanel = new InputPanel();
-                    OutputPanel outputPanel = new OutputPanel();
-
-                    mainFrame.getContentPane().setLayout(new GridLayout(2, 1));
-                    mainFrame.getContentPane().add(inputPanel);
-                    mainFrame.getContentPane().add(outputPanel);
-
-                    mainFrame.setVisible(true);
+                    showMainProgramWindow();
                 } else {
                     // Authentication failed, show an error message
                     JOptionPane.showMessageDialog(loginFrame, "Invalid username or password.", "Error",
@@ -59,41 +54,7 @@ class EncryptDecrypt {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Show the registration screen
-                loginFrame.dispose();
-                JFrame registerFrame = new JFrame("Registration");
-                registerFrame.setSize(400, 300);
-                registerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-                JPanel registerPanel = new JPanel();
-                registerPanel.setLayout(new GridLayout(4, 1));
-
-                JLabel newUsernameLabel = new JLabel("New Username:");
-                JTextField newUsernameField = new JTextField();
-
-                JLabel newPasswordLabel = new JLabel("New Password:");
-                JPasswordField newPasswordField = new JPasswordField();
-
-                JButton registerUserButton = new JButton("Register User");
-                registerUserButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        // Add the new user to the authorized users and show the login screen
-                        authorizedUsers.put(newUsernameField.getText(), new String(newPasswordField.getPassword()));
-                        JOptionPane.showMessageDialog(registerFrame, "User successfully registered.", "Success",
-                                JOptionPane.PLAIN_MESSAGE);
-                        registerFrame.dispose();
-                        loginFrame.setVisible(true);
-                    }
-                });
-                registerPanel.add(newUsernameLabel);
-                registerPanel.add(newUsernameField);
-                registerPanel.add(newPasswordLabel);
-                registerPanel.add(newPasswordField);
-                registerPanel.add(registerUserButton);
-
-                registerFrame.getContentPane().add(registerPanel);
-                registerFrame.setVisible(true);
+                showRegistrationScreen(loginFrame);
             }
         });
 
@@ -106,6 +67,69 @@ class EncryptDecrypt {
 
         loginFrame.getContentPane().add(loginPanel);
         loginFrame.setVisible(true);
+    }
+
+    private void showRegistrationScreen(JFrame previousFrame) {
+        previousFrame.dispose();
+        JFrame registerFrame = new JFrame("Registration");
+        registerFrame.setSize(400, 300);
+        registerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel registerPanel = new JPanel();
+        registerPanel.setLayout(new GridLayout(4, 1));
+
+        JLabel newUsernameLabel = new JLabel("New Username:");
+        JTextField newUsernameField = new JTextField();
+
+        JLabel newPasswordLabel = new JLabel("New Password:");
+        JPasswordField newPasswordField = new JPasswordField();
+
+        JButton registerUserButton = new JButton("Register User");
+        registerUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add the new user to the authorized users and show the login screen
+                authorizedUsers.put(newUsernameField.getText(), new String(newPasswordField.getPassword()));
+                JOptionPane.showMessageDialog(registerFrame, "User successfully registered.", "Success",
+                        JOptionPane.PLAIN_MESSAGE);
+                registerFrame.dispose();
+                createLoginScreen();
+            }
+        });
+        registerPanel.add(newUsernameLabel);
+        registerPanel.add(newUsernameField);
+        registerPanel.add(newPasswordLabel);
+        registerPanel.add(newPasswordField);
+        registerPanel.add(registerUserButton);
+
+        registerFrame.getContentPane().add(registerPanel);
+        registerFrame.setVisible(true);
+    }
+
+    private void showMainProgramWindow() {
+        JFrame mainFrame = new JFrame("Encryption/Decryption Program");
+        mainFrame.setSize(400, 300);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        InputPanel inputPanel = new InputPanel();
+        OutputPanel outputPanel = new OutputPanel();
+
+        mainFrame.getContentPane().setLayout(new GridLayout(2, 1));
+        mainFrame.getContentPane().add(inputPanel);
+        mainFrame.getContentPane().add(outputPanel);
+
+        mainFrame.setVisible(true);
+    }
+
+    // Your InputPanel and OutputPanel classes go here
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new EncryptDecrypt();
+            }
+        });
     }
 }
 
