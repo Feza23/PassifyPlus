@@ -1,7 +1,4 @@
 ## PassifyPlus
-
-
-## Introduction
 PassifyPlus was created to address the need for secure password management and encryption/decryption functionalities. In today's digital age, where online security is paramount, individuals and organizations require robust tools to generate strong passwords and encrypt sensitive data. PassifyPlus aims to provide a simple yet effective solution to these security concerns.
 
 ## Features
